@@ -39,34 +39,25 @@
         <div class="row align-items-center">
             <div class="col-xxl-6 col-lg-6">
                 <div class="product__details-thumb-wrapper d-sm-flex align-items-start mr-50">
+                    @php 
+                        $product_images = $product->getMedia('products-media');
+                    @endphp
 
-                    {{-- Thumbnail Tabs --}}
+                    {{-- Thumbnail Buttons --}}
                     <div class="product__details-thumb-tab mr-20">
                         <nav>
-                            <div class="nav nav-tabs flex-nowrap flex-sm-column" id="nav-tab" role="tablist">
-                                @php 
-                                    $product_images = $product->getMedia('products-media');
-                                @endphp
-
+                            <div class="nav flex-nowrap flex-sm-column" id="thumb-list">
                                 @foreach($product_images as $index => $image)
                                     <button 
-                                        class="nav-link {{ $index == 0 ? 'active' : '' }}" 
-                                        id="img-{{ $index }}-tab"
-                                        data-bs-toggle="tab"
-                                        data-bs-target="#img-{{ $index }}"
                                         type="button" 
-                                        role="tab"
-                                        aria-controls="img-{{ $index }}"
-                                        aria-selected="{{ $index == 0 ? 'true' : 'false' }}"
+                                        class="nav-link {{ $index == 0 ? 'active' : '' }}" 
+                                        data-index="{{ $index }}"
                                     >
                                         <img 
                                             src="{{ $image->getUrl() }}" 
-                                            alt="{{ $product->name }}"
-                                            data-gc-caption="Your caption text"
-                                            data-variation-id="{{ $image->custom_properties['variation_id'] ?? '' }}"
-                                            data-option-id="{{ $image->custom_properties['option_id'] ?? '' }}"
-                                            data-variation-name="{{ $image->custom_properties['variation_name'] ?? '' }}"
-                                            data-option-value="{{ $image->custom_properties['option_value'] ?? '' }}"
+                                            alt="{{ $product->name }}" 
+                                            class="img-fluid" 
+                                            width="80"
                                         >
                                     </button>
                                 @endforeach
@@ -74,35 +65,24 @@
                         </nav>
                     </div>
 
-                    {{-- Main Image Area --}}
-                    <div class="product__details-thumb-tab-content">
-                        <div class="tab-content" id="productthumbcontent">
-                            @foreach($product_images as $index => $image)
-                                <div 
-                                    class="tab-pane fade {{ $index == 0 ? 'show active' : '' }}" 
-                                    id="img-{{ $index }}" 
-                                    role="tabpanel" 
-                                    aria-labelledby="img-{{ $index }}-tab"
+                    {{-- Main Image Display --}}
+                    <div class="tab-content" id="main-image-container">
+                        @foreach($product_images as $index => $image)
+                            <div 
+                                class="tab-pane {{ $index == 0 ? 'active' : '' }}" 
+                                data-index="{{ $index }}"
+                            >
+                                <img 
+                                    src="{{ $image->getUrl() }}" 
+                                    alt="{{ $product->name }}" 
+                                    class="img-fluid main-image"
                                 >
-                                    <div class="product__details-thumb-big w-img">
-                                        <img 
-                                            src="{{ $image->getUrl() }}" 
-                                            alt="{{ $product->name }}"
-                                            data-gc-caption="Your caption text"
-                                            data-variation-id="{{ $image->custom_properties['variation_id'] ?? '' }}"
-                                            data-option-id="{{ $image->custom_properties['option_id'] ?? '' }}"
-                                            data-variation-name="{{ $image->custom_properties['variation_name'] ?? '' }}"
-                                            data-option-value="{{ $image->custom_properties['option_value'] ?? '' }}"
-                                        >
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
+                            </div>
+                        @endforeach
                     </div>
-
                 </div>
-                {{-- @include('site.products._preview') --}}
             </div>
+
 
             <div class="col-xxl-6 col-lg-6">
                 <div class="product__details-content pr-80">
@@ -486,4 +466,22 @@
 
     <!-- =================Product Area Ends================= -->
 
+@endsection
+
+@section('script')
+<script>
+$(document).ready(function() {
+    $('#thumb-list .nav-link').on('click', function() {
+        var index = $(this).data('index');
+
+        // remove active from all
+        $('#thumb-list .nav-link').removeClass('active');
+        $('#main-image-container .tab-pane').removeClass('active').hide();
+
+        // add active to clicked
+        $(this).addClass('active');
+        $('#main-image-container .tab-pane[data-index="' + index + '"]').addClass('active').fadeIn(200);
+    });
+});
+</script>
 @endsection
