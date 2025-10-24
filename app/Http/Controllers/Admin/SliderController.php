@@ -41,7 +41,7 @@ class SliderController extends Controller implements HasMiddleware
             'title' => 'required|max:255',
             'description' => 'nullable',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-            'discount_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'discount_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'is_visible' => 'required|in:0,1'
         ]);
         if ($validator->fails()) {

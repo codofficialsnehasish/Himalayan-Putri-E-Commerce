@@ -25,6 +25,12 @@ class HomeController extends Controller
                                 ->limit(8)
                                 ->orderBy('id','desc')
                                 ->get();
+        $new_products = Product::where('is_visible', 1)
+                                ->where('is_home',1)
+                                ->with(['variations.options'])
+                                ->orderBy('created_at', 'desc')
+                                ->limit(8)
+                                ->get();
         $brands = Brand::where('is_visible',1)->where('is_home',1)->get();
         $testimonials = Testimonial::where('is_visible',1)->get();
         $featured_products = Product::where('is_featured',1)
@@ -41,7 +47,7 @@ class HomeController extends Controller
                                 ->orderBy('total_sold', 'DESC')
                                 ->limit(8)
                                 ->get();
-        return view('site.home',compact('sliders','categorys','brands','testimonials','featured_products','all_products','best_selling_products'));
+        return view('site.home',compact('sliders','categorys','brands','testimonials','featured_products','all_products','new_products','best_selling_products'));
     }
 }
 
