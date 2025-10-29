@@ -14,10 +14,10 @@
                                 stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </span>
-                        <a href="tel:+918091451734">+91 8091451734</a>
+                        <a href="tel:{{ get_setting('contact_phone_1') }}">{{ get_setting('contact_phone_1') }}</a>
                     </div>
                     <div class="header-top-notice d-none d-lg-block">
-                        <p>TAKE CARE OF YOUR Health <span class="grocery-clr">25% OFF</span> USE CODE “ DOFIX03 ”</p>
+                        <p>{{ get_setting('coupon_offer_text') }}</p>
                     </div>
                     <div class="tp-header-top-menu d-flex align-items-center justify-content-end">
                         <div class="header-lang-item tp-header-setting">
@@ -55,7 +55,7 @@
                         <div class="header-left">
                         <div class="header-logo">
                             <a href="{{ route('home') }}">
-                                <img src="{{ asset('assets/site-assets/imgs/grocery/logo/logo.png') }}" alt="logo not found">
+                                <img src="{{ get_setting('logo', true) }}" alt="logo not found">
                             </a>
                         </div>
                         <div class="mean__menu-wrapper grocery__menu d-none d-lg-block">

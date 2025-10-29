@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="icon" href="{{ asset('assets/site-assets/img/fab.png') }}" type="image/x-icon"/>
-    <title>@yield('title') | {{ config('app.name', 'Laravel') }}</title>
+    <link rel="icon" href="{{ get_setting('favicon', true) }}" type="image/x-icon"/>
+    <title>@yield('title') | {{ get_setting('site_title') }}</title>
 
     <!-- Bootstrap Core and vandor -->
     <link rel="stylesheet" href="{{ asset('assets/admin-assets/plugins/bootstrap/css/bootstrap.min.css') }}" />

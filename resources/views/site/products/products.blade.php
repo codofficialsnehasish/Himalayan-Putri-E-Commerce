@@ -1,7 +1,21 @@
 @extends('layouts.web-app')
 
+@php
+    use App\Models\Page;
+    $page = Page::where('slug', 'shop')->orWhere('slug','products')->first(); 
+@endphp
 @section('title')
-    Shop
+    {{ $page->meta_title ?? $page->name ?? 'Shop' }}
+@endsection
+
+@section('meta')
+    @if(!empty($page->meta_description))
+        <meta name="description" content="{{ $page->meta_description }}">
+    @endif
+
+    @if(!empty($page->meta_keywords))
+        <meta name="keywords" content="{{ $page->meta_keywords }}">
+    @endif
 @endsection
 
 @section('style')
@@ -11,7 +25,7 @@
 
     <!-- Breadcrumb area start  -->
     <div class="breadcrumb__area theme-bg-1 p-relative z-index-11 pt-95 pb-95">
-        <div class="breadcrumb__thumb" data-background="{{ asset('assets/site-assets/imgs/bg/breadcrumb-bg-grocery.jpg') }}"></div>
+        <div class="breadcrumb__thumb" data-background="{{ get_setting('breadcrumb_banner', true) }}"></div>
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-xxl-12">
@@ -38,7 +52,7 @@
             <div class="row">
                 <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6">
                     <div class="bd-product__result mb-30">
-                        <h4>20 Item On List</h4>
+                        <h4>{{ $products->count() }} Item On List</h4>
                     </div>
                 </div>
                 <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-6">

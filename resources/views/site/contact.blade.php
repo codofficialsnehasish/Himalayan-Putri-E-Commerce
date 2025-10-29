@@ -1,12 +1,28 @@
 @extends('layouts.web-app')
 
-@section('title') Contact Us @endsection
+@php
+    use App\Models\Page;
+    $page = Page::where('slug', 'contact')->orWhere('slug','contact-us')->first(); 
+@endphp
+@section('title')
+    {{ $page->meta_title ?? $page->name ?? 'Contact Us' }}
+@endsection
+
+@section('meta')
+    @if(!empty($page->meta_description))
+        <meta name="description" content="{{ $page->meta_description }}">
+    @endif
+
+    @if(!empty($page->meta_keywords))
+        <meta name="keywords" content="{{ $page->meta_keywords }}">
+    @endif
+@endsection
 
 @section('content')
 
     <!-- Breadcrumb area start  -->
     <div class="breadcrumb__area theme-bg-1 p-relative z-index-11 pt-95 pb-95">
-        <div class="breadcrumb__thumb" data-background="{{ asset('assets/site-assets/imgs/bg/breadcrumb-bg.jpg') }}"></div>
+        <div class="breadcrumb__thumb" data-background="{{ get_setting('breadcrumb_banner', true) }}"></div>
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-xxl-12">
@@ -34,33 +50,51 @@
                 <div class="col-xxl-4 col-xl-4 col-lg-6">
                     <div class="contact-info-item text-center">
                         <div class="contact-info-icon">
-                        <span><i class="fa-light fa-location-dot"></i></span>
+                            <span><i class="fa-light fa-location-dot"></i></span>
                         </div>
                         <div class="contact-info-content">
                         <h4>Our Location</h4>
-                        <p><a href="https://maps.app.goo.gl/911yNjKGCTog4zeq8">Shed No:04, Ind. Area, Phase II, Nagrota Bagwan, Himachal Pradesh 176047</a></p>
+                            @if(get_setting('address_1'))
+                                <p>{{ get_setting('address_1') }}</p>
+                            @endif
+
+                            @if(get_setting('address_2'))
+                                <p class="mt-3">{{ get_setting('address_2') }}</p>
+                            @endif
                         </div>
                     </div>
                 </div>
                 <div class="col-xxl-4 col-xl-4 col-lg-6">
                     <div class="contact-info-item text-center">
                         <div class="contact-info-icon">
-                        <span><i class="fa-light fa-envelope"></i></span>
+                            <span><i class="fa-light fa-envelope"></i></span>
                         </div>
                         <div class="contact-info-content">
-                        <h4>Our Email Address</h4>
-                        <span><a href="mailto:info@himalayanputri.com">info@himalayanputri.com</a></span>
+                            <h4>Our Email Address</h4>
+                            @if(get_setting('email_1'))
+                                <span><a href="mailto:{{ get_setting('email_1') }}">{{ get_setting('email_1') }}</a></span>
+                            @endif
+
+                            @if(get_setting('email_2'))
+                                <span><a href="mailto:{{ get_setting('email_2') }}">{{ get_setting('email_2') }}</a></span>
+                            @endif
                         </div>
                     </div>
                 </div>
                 <div class="col-xxl-4 col-xl-4 col-lg-6">
                     <div class="contact-info-item text-center">
                         <div class="contact-info-icon">
-                        <span><i class="fa-thin fa-phone"></i></span>
+                            <span><i class="fa-thin fa-phone"></i></span>
                         </div>
                         <div class="contact-info-content">
                         <h4>Contact Phone Number</h4>
-                        <span><a href="mailto:+918091451734">+91 8091451734</a></span>
+                            @if(get_setting('contact_phone_1'))
+                                <span><a href="tel:{{ get_setting('contact_phone_1') }}">{{ get_setting('contact_phone_1') }}</a></span>
+                            @endif
+
+                            @if(get_setting('contact_phone_2'))
+                                <span><a href="tel:{{ get_setting('contact_phone_2') }}">{{ get_setting('contact_phone_2') }}</a></span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -69,7 +103,7 @@
                 <div class="row gy-50">
                     <div class="col-xxl-6 col-xl-6">
                         <div class="contact-map">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3379.6642856800227!2d76.3788839!3d32.1053578!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391b4c31055234ad%3A0x8b55f68a2c8e85b!2sHimalayan%20Putri-%20Best%20Naturopathic%20Practitioner%20in%20India%2C%20Weight%20Loss%20and%20Ashtanga%20Yoga!5e0!3m2!1sen!2sin!4v1761126067419!5m2!1sen!2sin"></iframe>
+                            {!! get_setting('google_map_iframe') !!}
                         </div>
                     </div>
                     <div class="col-xxl-6 col-xl-6">

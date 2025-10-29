@@ -19,7 +19,12 @@ use App\Http\Controllers\Admin\{
     UsersController,
     FilterAttributeController,
     FilterAttributeValueController,
-    CategoryFilterAttributeController
+    CategoryFilterAttributeController,
+    SettingController,
+    ServiceController,
+    PageController,
+    OfferBannerController,
+    ReportController,
 };
 
 use App\Http\Controllers\Site\{
@@ -37,6 +42,7 @@ use App\Http\Controllers\LocationController;
 Route::post('get-state-list',[LocationController::class,'get_state_list'])->name('get-state-list');
 Route::post('get-city-list',[LocationController::class,'get_city_list'])->name('get-city-list');
 
+Route::middleware(['maintenance'])->group(function () {
 
 Route::get('/',[HomeController::class,'index'])->name('home');
 
@@ -55,16 +61,6 @@ Route::get('categories/{slug?}',[SiteProductController::class,'products_by_categ
 Route::get('/about', function () {
     return view('site.about');
 })->name('about');
-
-Route::get('/terms-and-conditions', function () {
-    return view('site.terms');
-})->name('terms-and-conditions');
-Route::get('/privacy-policy', function () {
-    return view('site.privacy_policy');
-})->name('privacy-policy');
-Route::get('/return-policy', function () {
-    return view('site.return_policy');
-})->name('return-policy');
 
 // Route::get('registration',[RegistrationController::class,'registration'])->name('registration');
 // Route::post('registration',[RegistrationController::class,'register_user'])->name('register-user');
@@ -117,7 +113,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/products/{product}/reviews', [ProductReviewController::class, 'store'])->name('reviews.store');
 
 });
-
+});
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
@@ -154,6 +150,10 @@ Route::middleware('auth')->group(function () {
 
         Route::resource('category', CategoryController::class);
         Route::resource('brand', BrandController::class);
+        Route::resource('service', ServiceController::class);
+
+        Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+        Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
 
         Route::controller(ProductController::class)->group( function () {
             Route::prefix('product')->group( function () {
@@ -203,7 +203,8 @@ Route::middleware('auth')->group(function () {
 
         Route::resource('slider', SliderController::class);
         Route::resource('testimonial', TestimonialController::class);
-
+        Route::resource('page', PageController::class);
+        Route::resource('offer-banner', OfferBannerController::class);
 
         Route::resource('system-user', SystemUserController::class);
 
@@ -240,8 +241,22 @@ Route::middleware('auth')->group(function () {
         // Category Filter Assignment
         Route::get('categories/{category}/filter-attributes', [CategoryFilterAttributeController::class,'edit'])->name('admin.categories.filter-attributes.edit');
         Route::put('categories/{category}/filter-attributes', [CategoryFilterAttributeController::class,'update'])->name('admin.categories.filter-attributes.update');
+    
+    
+    
+        Route::prefix('reports')->name('reports.')->group(function () {
+            Route::get('/sales', [ReportController::class, 'sales'])->name('sales');
+            Route::get('/orders', [ReportController::class, 'orders'])->name('orders');
+            Route::get('/products', [ReportController::class, 'products'])->name('products');
+            Route::get('/payments', [ReportController::class, 'payments'])->name('payments');
+            Route::get('/customers', [ReportController::class, 'customers'])->name('customers');
+        });
+    
     });
 
 });
 
+
 require __DIR__.'/auth.php';
+
+Route::get('/{slug}', [HomeController::class, 'frontendPage'])->name('page');

@@ -63,6 +63,22 @@
                                             <label class="form-label">Long Description</label>
                                             <textarea class="form-control no-resize summernote" name="long_description" id=""></textarea>
                                         </div>
+
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">Meta Title</label>
+                                            <input type="text" class="form-control" name="meta_title" value="{{ old('meta_title', $product->meta_title ?? '') }}">
+                                        </div>
+
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">Meta Keywords</label>
+                                            <input type="text" class="form-control" name="meta_keywords" value="{{ old('meta_keywords', $product->meta_keywords ?? '') }}">
+                                            <small class="text-muted">Separate keywords with commas</small>
+                                        </div>
+
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">Meta Description</label>
+                                            <textarea class="form-control no-resize" name="meta_description" rows="3">{{ old('meta_description', $product->meta_description ?? '') }}</textarea>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -59,7 +59,7 @@ class Checkout extends Controller
         if ($request->payment_method == 'razorpay') {
             // return $this->razorpay_payment($request);
             $amount = calculate_cart_total() * 100; // Convert to paisa
-            $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+            $api = new Api( get_setting('razorpay_key'), get_setting('razorpay_secret')); 
             $order = $api->order->create([
                 'receipt' => 'order_' . time(),
                 'amount' => $amount,
@@ -71,7 +71,7 @@ class Checkout extends Controller
                 'razorpay' => true,
                 'order_id' => $order->id,
                 'amount' => $amount,
-                'key' => env('RAZORPAY_KEY'),
+                'key' =>  get_setting('razorpay_key'),
                 'user' => Auth::user(),
             ]);
         } elseif ($request->payment_method == 'cod') {
@@ -92,7 +92,7 @@ class Checkout extends Controller
     public function razorpay_callback(Request $request)
     {
         try {
-            $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+            $api = new Api( get_setting('razorpay_key'), get_setting('razorpay_secret'));
             $payment = $api->payment->fetch($request->razorpay_payment_id);
 
             if ($payment->status == 'captured') {

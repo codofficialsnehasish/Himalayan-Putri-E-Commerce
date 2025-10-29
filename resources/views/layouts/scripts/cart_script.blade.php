@@ -430,8 +430,8 @@
                 url: "{{ route('cart.total') }}",
                 method: 'GET',
                 success: function (response) {
-                    $('#cart-subtotal').text(response.total)
-                    $('#cart-grandtotal').text(response.total)
+                    $('#cart-subtotal').text('₹ '+response.total)
+                    $('#cart-grandtotal').text('₹ '+response.total)
                 },
                 error: function () {
                     console.error('Failed to fetch cart count.');

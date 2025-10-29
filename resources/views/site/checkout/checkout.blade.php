@@ -1,12 +1,28 @@
 @extends('layouts.web-app')
 
-@section('title') Checkout @endsection
+@php
+    use App\Models\Page;
+    $page = Page::where('slug', 'checkout')->first(); 
+@endphp
+@section('title')
+    {{ $page->meta_title ?? $page->name ?? 'Checkout' }}
+@endsection
+
+@section('meta')
+    @if(!empty($page->meta_description))
+        <meta name="description" content="{{ $page->meta_description }}">
+    @endif
+
+    @if(!empty($page->meta_keywords))
+        <meta name="keywords" content="{{ $page->meta_keywords }}">
+    @endif
+@endsection
 
 @section('content')
 
     <!-- Breadcrumb area start  -->
       <div class="breadcrumb__area theme-bg-1 p-relative z-index-11 pt-95 pb-95">
-         <div class="breadcrumb__thumb" data-background="{{ asset('assets/site-assets/imgs/bg/breadcrumb-bg.jpg') }}"></div>
+         <div class="breadcrumb__thumb" data-background="{{ get_setting('breadcrumb_banner', true) }}"></div>
          <div class="container">
             <div class="row justify-content-center">
                <div class="col-xxl-12">
@@ -146,7 +162,7 @@
                                                 </td>
                                                 <td class="product-total">
                                                     <span class="amount">
-                                                        Rs {{ number_format(($item->productVariationOption ? $item->productVariationOption->price : $item->product?->total_price) * $item->quantity, 2) }}
+                                                        ₹ {{ number_format(($item->productVariationOption ? $item->productVariationOption->price : $item->product?->total_price) * $item->quantity, 2) }}
                                                     </span>
                                                 </td>
                                             </tr>
@@ -156,14 +172,14 @@
                                         @if (session()->has('applied_coupon'))
                                             <tr>
                                                 <th>Coupon ({{ session('applied_coupon.code') }})</th>
-                                                <td>- Rs {{ number_format(session('applied_coupon.discount'), 2) }}</td>
+                                                <td>- ₹ {{ number_format(session('applied_coupon.discount'), 2) }}</td>
                                             </tr>
                                         @endif
                                         <tr class="order-total">
                                             <th>Order Total</th>
                                             <td>
                                                 <strong>
-                                                    Rs {{ number_format($cart_items->sum(function($item) {
+                                                    ₹ {{ number_format($cart_items->sum(function($item) {
                                                         return ($item->productVariationOption ? $item->productVariationOption->price : $item->product?->total_price) * $item->quantity;
                                                     }) - (session('applied_coupon.discount') ?? 0), 2) }}
                                                 </strong>
@@ -281,10 +297,10 @@
                         if (response.razorpay) {
                             // Open Razorpay payment gateway
                             let options = {
-                                key: response.key,
+                                key: "{{ get_setting('razorpay_key') }}",
                                 amount: response.amount,
                                 currency: 'INR',
-                                name: "{{ env('APP_NAME') }}",
+                                name: "{{ get_setting('company_name') }}",
                                 description: 'Complete your order payment',
                                 image: "{{ asset('assets/site-assets/img/fab.png') }}",
                                 order_id: response.order_id,
@@ -320,7 +336,7 @@
                                     });
                                 },
                                 theme: {
-                                    color: '#93c84a'
+                                    color: "{{ get_setting('raz_colour_code') }}"
                                 },
                                 modal: {
                                     ondismiss: function () {

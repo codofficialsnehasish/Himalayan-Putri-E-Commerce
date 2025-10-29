@@ -57,6 +57,11 @@ class ProductController extends Controller implements HasMiddleware
         $product->product_type = $request->product_type ?? 'simple';
         $product->sort_description = $request->sort_description;
         $product->long_description = $request->long_description;
+        // SEO fields
+        $product->meta_title = $request->meta_title;
+        $product->meta_keywords = $request->meta_keywords;
+        $product->meta_description = $request->meta_description;
+
         $product->price = 0.00;
         $product->product_price = 0.00;
         $product->discount_rate = 0;
@@ -101,6 +106,12 @@ class ProductController extends Controller implements HasMiddleware
             $product->name = $request->product_name;
             $product->slug = createSlug($request->product_name, Product::class);
         }
+
+        // SEO fields
+        $product->meta_title = $request->meta_title;
+        $product->meta_keywords = $request->meta_keywords;
+        $product->meta_description = $request->meta_description;
+        
         $product->brand_id = $request->brand;
         $product->product_type = $request->product_type;
         $product->sort_description = $request->sort_description;

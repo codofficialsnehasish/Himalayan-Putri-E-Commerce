@@ -2,15 +2,26 @@
 @section('style')
 
 @endsection
+
 @section('title')
-    Product Details
+    {{ $product->meta_title ?? 'Product Details' }}
+@endsection
+
+@section('meta')
+    @if(!empty($product->meta_description))
+        <meta name="description" content="{{ $product->meta_description }}">
+    @endif
+
+    @if(!empty($product->meta_keywords))
+        <meta name="keywords" content="{{ $product->meta_keywords }}">
+    @endif
 @endsection
 
 @section('content')
 
     <!-- Breadcrumb area start  -->
     <div class="breadcrumb__area theme-bg-1 p-relative z-index-11 pt-95 pb-95">
-        <div class="breadcrumb__thumb" data-background="{{ asset('assets/site-assets/imgs/bg/breadcrumb-bg-grocery.jpg') }}"></div>
+        <div class="breadcrumb__thumb" data-background="{{ get_setting('breadcrumb_banner', true) }}"></div>
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-xxl-12">
@@ -194,27 +205,47 @@
                                 data-product-id="{{ $product->id }}" data-product-type="{{ $product->product_type }}"><i class="fa-solid fa-heart"></i></a>
                         </div>
                     </div>
-                    {{-- <div class="product__details-meta mb-20">
-                    <div class="sku">
-                        <span>SKU:</span>
-                        <a href="#">BO1D0MX8SJ</a>
+                    <div class="product__details-meta mb-20">
+                        {{-- <div class="sku">
+                            <span>SKU:</span>
+                            <a href="#">BO1D0MX8SJ</a>
+                        </div> --}}
+                        @if($product->categories->isNotEmpty())
+                            <div class="categories">
+                                <span>Categories:</span> 
+                                @foreach ($product->categories as $key => $category)
+                                    <a href="{{ route('categories.products', $category->slug) }}">{{ $category->name }}</a>@if(!$loop->last), @endif
+                                @endforeach
+                            </div>
+                        @endif
+
+                        {{-- <div class="tag">
+                            <span>Tags:</span> <a href="#"> Cheese,</a> <a href="#">Custard,</a> <a href="#">Frozen</a>
+                        </div> --}}
                     </div>
-                    <div class="categories">
-                        <span>Categories:</span> <a href="#">Milk,</a> <a href="#">Cream,</a> <a
-                            href="#">Fermented.</a>
-                    </div>
-                    <div class="tag">
-                        <span>Tags:</span> <a href="#"> Cheese,</a> <a href="#">Custard,</a> <a href="#">Frozen</a>
-                    </div>
-                    </div>
+                    @php
+                        $shareUrl = urlencode(route('product.details', $product->slug)); // your product URL
+                        $shareText = urlencode($product->name);
+                    @endphp
+
                     <div class="product__details-share">
-                    <span>Share:</span>
-                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                    <a href="#"><i class="fa-brands fa-behance"></i></a>
-                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
-                    </div> --}}
+                        <span>Share:</span>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ $shareUrl }}" target="_blank" title="Share on Facebook">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url={{ $shareUrl }}&text={{ $shareText }}" target="_blank" title="Share on Twitter">
+                            <i class="fa-brands fa-twitter"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ $shareUrl }}" target="_blank" title="Share on LinkedIn">
+                            <i class="fa-brands fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://www.pinterest.com/pin/create/button/?url={{ $shareUrl }}&description={{ $shareText }}" target="_blank" title="Share on Pinterest">
+                            <i class="fa-brands fa-pinterest"></i>
+                        </a>
+                        <a href="https://api.whatsapp.com/send?text={{ $shareText }}%20{{ $shareUrl }}" target="_blank" title="Share on WhatsApp">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -482,6 +513,12 @@ $(document).ready(function() {
         $(this).addClass('active');
         $('#main-image-container .tab-pane[data-index="' + index + '"]').addClass('active').fadeIn(200);
     });
+});
+</script>
+<script>
+$(document).ready(function() {
+    // Trigger click on the first variation option when page loads
+    $('.variation-option').first().trigger('click');
 });
 </script>
 @endsection

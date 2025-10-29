@@ -6,9 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="{{ get_setting('favicon', true) }}" type="image/x-icon"/>
 
-    <title>@yield('title') | {{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('title') | {{ get_setting('site_title') }}</title>
 
     <!-- Bootstrap Core and vandor -->
     <link rel="stylesheet" href="{{ asset('assets/admin-assets/plugins/bootstrap/css/bootstrap.min.css') }}" />
@@ -26,7 +26,7 @@
                 <div class="card-body">
                     <div class="text-center">
                         <a class="header-brand" href="{{ route('home') }}">{{--<i class="fa fa-graduation-cap brand-logo"></i>--}}
-                            <img src="{{ asset('assets/site-assets/imgs/grocery/logo/logo.png') }}" alt=""> 
+                            <img src="{{ get_setting('logo', true) }}" alt=""> 
                         </a>
                         <div class="card-title mt-3">@yield('login-title')</div>
                     </div>

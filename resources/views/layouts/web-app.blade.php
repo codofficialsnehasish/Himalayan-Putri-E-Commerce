@@ -4,13 +4,13 @@
 <head>
    <meta charset="utf-8">
    <meta http-equiv="x-ua-compatible" content="ie=edge">
-   <title>@yield('title') | {{ env('APP_NAME')}}</title>
-   <meta name="description" content="Developed By Code Of Dolphins">
+   <title>@yield('title')  {{-- get_setting('site_title') --}}</title>
+   @yield('meta')
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <meta name="csrf-token" content="{{ csrf_token() }}">
 
    <!-- Place favicon.ico in the root directory -->
-   <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/site-assets/imgs/grocery/favicon.ico') }}">
+   <link rel="shortcut icon" type="image/x-icon" href="{{ get_setting('favicon', true) }}">
 
    <!-- CSS here -->
    <link rel="stylesheet" href="{{ asset('assets/site-assets/css/bootstrap.min.css') }}">
@@ -52,6 +52,8 @@
         }
     </style>
     @yield('style')
+
+    {!! get_setting('header_script') !!}
 </head>
 <body class="hey-grocery">
     <!-- preloader start -->
@@ -118,7 +120,7 @@
                 <div class="offcanvas__top mb-40 d-flex justify-content-between align-items-center">
                     <div class="offcanvas__logo">
                         <a href="grocery.html">
-                            <img src="{{ asset('assets/site-assets/imgs/grocery/logo/logo.png') }}" alt="logo not found">
+                            <img src="{{ get_setting('logo', true) }}" alt="logo not found">
                         </a>
                     </div>
                     <div class="offcanvas__close">
@@ -126,12 +128,6 @@
                             <i class="fal fa-times"></i>
                         </button>
                     </div>
-                </div>
-                <div class="offcanvas__search mb-25">
-                    <form action="#">
-                        <input type="text" placeholder="What are you searching for?">
-                        <button type="submit"><i class="far fa-search"></i></button>
-                    </form>
                 </div>
                 <div class="mobile-menu fix mb-40"></div>
                 <div class="offcanvas__contact mt-30 mb-20">
@@ -142,8 +138,8 @@
                             <i class="fal fa-map-marker-alt"></i>
                             </div>
                             <div class="offcanvas__contact-text">
-                            <a class="grocery-clr-hover" target="_blank"
-                                href="https://maps.app.goo.gl/911yNjKGCTog4zeq8">Shed No:04, Ind. Area, Phase II, Nagrota Bagwan, Himachal Pradesh 176047</a>
+                            <a class="grocery-clr-hover"
+                                href="javascript:void(0);">{{ get_setting('address_1') }}</a>
                             </div>
                         </li>
                         <li class="d-flex align-items-center">
@@ -151,7 +147,7 @@
                             <i class="far fa-phone"></i>
                             </div>
                             <div class="offcanvas__contact-text">
-                            <a class="grocery-clr-hover" href="tel:+918091451734">+91 8091451734</a>
+                            <a class="grocery-clr-hover" href="tel:{{ get_setting('contact_phone_1') }}">{{ get_setting('contact_phone_1') }}</a>
                             </div>
                         </li>
                         <li class="d-flex align-items-center">
@@ -159,18 +155,26 @@
                             <i class="fal fa-envelope"></i>
                             </div>
                             <div class="offcanvas__contact-text">
-                            <a class="grocery-clr-hover" href="mailto:info@himalayanputri.com"><span
-                                    class="mailto:info@himalayanputri.com">info@himalayanputri.com</span></a>
+                            <a class="grocery-clr-hover" href="{{ get_setting('email_1') }}"><span
+                                    class="{{ get_setting('email_1') }}">{{ get_setting('email_1') }}</span></a>
                             </div>
                         </li>
                     </ul>
                 </div>
                 <div class="offcanvas__social">
                     <ul>
-                        <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                        <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                        <li><a href="#"><i class="fab fa-youtube"></i></a></li>
-                        <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+                        @if(get_setting('facebook_link'))
+                        <li><a href="{{ get_setting('facebook_link') }}"><i class="fab fa-facebook-f"></i></a></li>
+                        @endif
+                        @if(get_setting('twitter_link'))
+                        <li><a href="{{ get_setting('twitter_link') }}"><i class="fab fa-twitter"></i></a></li>
+                        @endif
+                        @if(get_setting('youtube_link'))
+                        <li><a href="{{ get_setting('youtube_link') }}"><i class="fab fa-youtube"></i></a></li>
+                        @endif
+                        @if(get_setting('linkedin_link'))
+                        <li><a href="{{ get_setting('linkedin_link') }}"><i class="fab fa-linkedin"></i></a></li>
+                        @endif
                     </ul>
                 </div>
                 </div>
@@ -394,5 +398,7 @@
 
 
     @yield('script')
+
+    {!! get_setting('footer_script') !!}
 </body>
 </html>

@@ -4,6 +4,7 @@
     use App\Models\Category;
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\Cookie;
+    use App\Models\Setting;
 
     if(!function_exists('get_cart_items')){
         function get_cart_items(){
@@ -32,5 +33,27 @@
         function get_special_categories(){
             $categories = Category::where('is_visible',1)->where('is_menu',1)->where('is_special',1)->orderBy('id','desc')->limit(2)->get();
             return $categories;
+        }
+    }
+
+    if (!function_exists('get_setting')) {
+        function get_setting($key = null, $media = false)
+        {
+            static $settingsCache = null;
+
+            if ($settingsCache === null) {
+                $settingsCache = Setting::first();
+            }
+
+            if (!$key) {
+                return $settingsCache;
+            }
+
+            // Handle media fields
+            if ($media) {
+                return $settingsCache?->getFirstMediaUrl($key) ?: null;
+            }
+
+            return $settingsCache?->$key;
         }
     }

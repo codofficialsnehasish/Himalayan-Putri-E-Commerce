@@ -36,6 +36,10 @@
                     </li>
                     @endcanany
 
+                    @can('Settings Show')
+                    <li class="active"><a href="{{ route('settings.index') }}"><i class="fa fa-cog"></i><span>Settings</span></a></li>
+                    @endcan
+
                     @canany(['Web User Show', 'System User Show'])
                     <li>
                         <a href="javascript:;">
@@ -78,6 +82,14 @@
                     <li class="active"><a href="{{ route('slider.index') }}"><i class="fa fa-image"></i><span>Slider</span></a></li>
                     @endcan
 
+                    @can('Service Show')
+                    <li class="active"><a href="{{ route('service.index') }}"><i class="fa fa-bell"></i><span>Service</span></a></li>
+                    @endcan
+
+                    @can('OfferBanner Show')
+                    <li class="active"><a href="{{ route('offer-banner.index') }}"><i class="fa fa-tags"></i><span>Offer Banner</span></a></li>
+                    @endcan
+
                     @can('Coupon Show')
                     <li class="active"><a href="{{ route('coupon.index') }}"><i class="fa fa-ticket"></i><span>Coupon</span></a></li>
                     @endcan
@@ -86,9 +98,43 @@
                     <li class="active"><a href="{{ route('testimonial.index') }}"><i class="fa fa-comment"></i><span>Testimonial</span></a></li>
                     @endcan
 
+                    @can('Page Show')
+                    <li class="active"><a href="{{ route('page.index') }}"><i class="fa fa-file"></i><span>Pages</span></a></li>
+                    @endcan
+
                     @can('ContactUs Show')
                     <li class="active"><a href="{{ route('contact-us.index') }}"><i class="fa fa-envelope"></i><span>Contact Us</span></a></li>
                     @endcan
+
+                    @canany(['Sales Report', 'Orders Report', 'Products Report', 'Payments Report', 'Customers Report'])
+                    <li>
+                        <a href="javascript:;">
+                            <i class="fa fa-bar-chart"></i><span>Reports</span>
+                        </a>
+                        <ul>
+                            @can('Sales Report')
+                            <li><a href="{{ route('reports.sales') }}">Sales Report</a></li>
+                            @endcan
+
+                            @can('Orders Report')
+                            <li><a href="{{ route('reports.orders') }}">Orders Report</a></li>
+                            @endcan
+
+                            {{-- @can('Products Report')
+                            <li><a href="{{ route('reports.products') }}">Products Report</a></li>
+                            @endcan --}}
+
+                            @can('Payments Report')
+                            <li><a href="{{ route('reports.payments') }}">Payments Report</a></li>
+                            @endcan
+
+                            {{-- @can('Customers Report')
+                            <li><a href="{{ route('reports.customers') }}">Customers Report</a></li>
+                            @endcan --}}
+                        </ul>
+                    </li>
+                    @endcanany
+
                 </ul>
             </nav>
         </div>
